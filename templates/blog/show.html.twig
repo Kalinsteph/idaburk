@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<article>
+    <h2>{{ contenu.titre }}</h2>
+    <div class="metadata">ecrit le 26/10/2020 dans la catégorie {{ contenu.category.titre }}</div>
+    <div class="content">
+        <img src="{{contenu.image}}" alt="">
+      {{ contenu.contenu | raw }}
+    </div>
+    <hr>
+</article>
+
+<section id="commentaires">
+    <h1>{{ contenu.comments | length }} Commentaires: </h1>
+    {% for comment in contenu.comments %}
+
+    <div class="comment">
+        
+            <div class="row">
+                <div class="col-3">
+                    {{ comment.author }} <small>{{ comment.dateCreation | date('d/m/Y à H:i') }}</small>
+
+                </div>
+                <div class="col">
+                    {{ comment.content | raw }}
+                </div>
+            
+        </div> 
+    </div>
+    {% endfor %}
+
+    {% if app.user %}
+    {{ form_start(commentForm) }}
+
+    {{ form_row(commentForm.author, {'attr':{'placeholder':"Le nom d'auteur"}}) }}
+
+    {{ form_row(commentForm.content, {'attr':{'placeholder':"Ecrire le commentaire ici"}}) }}
+
+    <button type="submit" class="btn btn-success">
+        Commenter
+    </button>
+    {{ form_end(commentForm) }}
+    {% else %}
+    
+    <h2>Veuillez  vous <a href="{{ path('security_connect') }}">connecter </a>pour commenter</h2>
+     
+    {% endif %}
+
+  
+   
+</section>
+{% endblock %}
